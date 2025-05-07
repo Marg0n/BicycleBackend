@@ -12,6 +12,10 @@ export interface TUser {
   role:  'admin' | 'customer' ;
   status: 'active' | 'deactivate';
   image?: string;
+  address?: string;
+  phone?: string;
+  bloodGroup?: string;
+  emergencyContact?: string;
 }
 
 export interface UserModel extends Model<TUser> {

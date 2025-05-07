@@ -44,7 +44,18 @@ export const userSchema = new Schema<TUser, UserModel>(
     },
     image: {
       type: String,
-      // default: null,
+    },
+    address: {
+      type: String,
+    },
+    phone: {
+      type: String,
+    },
+    bloodGroup: {
+      type: String,
+    },
+    emergencyContact: {
+      type: String,
     },
   },
   {
