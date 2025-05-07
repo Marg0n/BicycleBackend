@@ -16,6 +16,12 @@ export interface TUser {
   phone?: string;
   bloodGroup?: string;
   emergencyContact?: string;
+  gender?: string;
+  dateOfBirth?: string;
+  country?: string;
+  city?: string;
+  state?: string;
+  zipCode?: string;
 }
 
 export interface UserModel extends Model<TUser> {

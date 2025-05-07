@@ -57,6 +57,24 @@ export const userSchema = new Schema<TUser, UserModel>(
     emergencyContact: {
       type: String,
     },
+    gender: {
+      type: String,
+    },
+    dateOfBirth: {
+      type: String,
+    },
+    country: {
+      type: String,
+    },
+    city: {
+      type: String,
+    },
+    state: {
+      type: String,
+    },
+    zipCode: {
+      type: String,
+    },
   },
   {
     timestamps: true,
