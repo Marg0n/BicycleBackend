@@ -36,7 +36,13 @@ const productSchema = new Schema<TProduct>(
       min: [0, 'Quantity must be a positive number'],
     },
     inStock: { type: Boolean, default: true },
-    rating: { type: Number, default: 0 },
+    rating: { 
+      type: Number,
+      // required: [true, 'Please provide a rating.'],
+      min: [1, 'Rating cannot be less than 1.'],
+      max: [5, 'Rating cannot be more than 5.'],
+      default: 3,
+    },
   },
   {
     timestamps: true,
