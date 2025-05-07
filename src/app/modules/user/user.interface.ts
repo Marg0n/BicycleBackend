@@ -16,7 +16,7 @@ export interface TUser {
   phone?: string;
   bloodGroup?: string;
   emergencyContact?: string;
-  gender?: string;
+  gender?: 'male' | 'female';
   dateOfBirth?: Date;
   country?: string;
   city?: string;

@@ -59,6 +59,7 @@ export const userSchema = new Schema<TUser, UserModel>(
     },
     gender: {
       type: String,
+      enum: ['male', 'female'],
     },
     dateOfBirth: {
       type: Date,
