@@ -5,15 +5,15 @@ import config from '../../config';
 import { UserStatus } from './user.constant';
 import { TUser, UserModel } from './user.interface';
 
-export const userSchema = new Schema<TUser,UserModel>(
+export const userSchema = new Schema<TUser, UserModel>(
   {
     name: {
-        type: String,
-        required: [true,'Please provide your name'],
-        unique: true,
-        minlength:3,
-        maxlength: 50,
-      },
+      type: String,
+      required: [true, 'Please provide your name'],
+      unique: true,
+      minlength: 3,
+      maxlength: 50,
+    },
     email: {
       type: String,
       required: true,
@@ -33,9 +33,9 @@ export const userSchema = new Schema<TUser,UserModel>(
     },
     role: {
       type: String,
-      enum: [ 'customer', 'admin'],
-      default:'customer',
-      required:true,
+      enum: ['customer', 'admin'],
+      default: 'customer',
+      required: true,
     },
     status: {
       type: String,
@@ -44,7 +44,7 @@ export const userSchema = new Schema<TUser,UserModel>(
     },
     image: {
       type: String,
-      default: null,
+      // default: null,
     },
   },
   {
@@ -53,10 +53,10 @@ export const userSchema = new Schema<TUser,UserModel>(
   },
 );
 userSchema.pre('save', async function (next) {
-  const user = this; 
-  
-  // hashing password and save into DB
- user.password = await bcrypt.hash(
+  const user = this;
+
+  //* hashing password and save into DB
+  user.password = await bcrypt.hash(
     user.password,
     Number(config.bcrypt_salt_rounds),
   );
@@ -64,13 +64,11 @@ userSchema.pre('save', async function (next) {
   next();
 });
 
-// set '' after saving password
+//? set '' after saving password
 userSchema.post('save', function (doc, next) {
   doc.password = '';
   next();
 });
-
-
 
 userSchema.statics.isUserExistsByCustomId = async function (id: string) {
   return await User.findOne({ id }).select('+password');
@@ -98,4 +96,4 @@ userSchema.methods.comparePassword = async function (enteredPassword: string) {
   }
   return await bcrypt.compare(enteredPassword, this.password);
 };
-export const User =  model<TUser,UserModel>('User', userSchema);
+export const User = model<TUser, UserModel>('User', userSchema);
