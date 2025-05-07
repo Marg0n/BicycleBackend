@@ -42,6 +42,10 @@ export const userSchema = new Schema<TUser,UserModel>(
       enum: UserStatus,
       default: 'active',
     },
+    image: {
+      type: String,
+      default: null,
+    },
   },
   {
     timestamps: true,

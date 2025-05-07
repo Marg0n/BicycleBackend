@@ -11,6 +11,7 @@ export interface TUser {
   passwordChangedAt?: Date;
   role:  'admin' | 'customer' ;
   status: 'active' | 'deactivate';
+  image?: string;
 }
 
 export interface UserModel extends Model<TUser> {
