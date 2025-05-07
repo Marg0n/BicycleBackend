@@ -17,7 +17,7 @@ export interface TUser {
   bloodGroup?: string;
   emergencyContact?: string;
   gender?: string;
-  dateOfBirth?: string;
+  dateOfBirth?: Date;
   country?: string;
   city?: string;
   state?: string;

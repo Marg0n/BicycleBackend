@@ -61,7 +61,7 @@ export const userSchema = new Schema<TUser, UserModel>(
       type: String,
     },
     dateOfBirth: {
-      type: String,
+      type: Date,
     },
     country: {
       type: String,
