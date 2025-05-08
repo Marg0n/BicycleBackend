@@ -10,7 +10,7 @@ export interface TUser {
   needsPasswordChange: boolean;
   passwordChangedAt?: Date;
   role:  'admin' | 'customer' ;
-  status: 'active' | 'deactivate';
+  status: "active" | "inactive";
   image?: string;
   address?: string;
   phone?: string;

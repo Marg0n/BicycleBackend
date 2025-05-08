@@ -3,4 +3,4 @@ export const USER_ROLE = {
       admin: 'admin',
     } as const;
     
-    export const UserStatus = ['active', 'deactivate '];
+    export const UserStatus = ["active" , "inactive"];
