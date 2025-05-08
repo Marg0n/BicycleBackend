@@ -1,50 +1,53 @@
-import { model, Schema } from "mongoose";
-import { TOrder, TOrderedItem } from "./order.interface";
-import { Status } from "./order.constant";
+import { model, Schema } from 'mongoose';
+import { TOrder, TOrderedItem } from './order.interface';
+import { Status } from './order.constant';
 
+const orderedItem = new Schema<TOrderedItem>({
+  product: {
+    type: Schema.Types.ObjectId,
+    ref: 'Product',
+    required: true,
+  },
+  quantity: {
+    type: Number,
+    required: true,
+  },
+  price: {
+    type: Number,
+    required: true,
+  },
+});
 
-const orderedItem = new Schema <TOrderedItem> ({
-    product: {
-        type: Schema.Types.ObjectId,
-        ref: 'Product',
-        required:true
-    },  
-    quantity: { 
-        type: Number,
-        required:true
-    },
-    price: {
-        type: Number,
-        required:true
-    }
-})
-
-const orderSchema = new Schema <TOrder>({
+const orderSchema = new Schema<TOrder>(
+  {
     products: [orderedItem],
     user: {
-        type: Schema.Types.ObjectId,
-        required:true,
-        ref: 'User'
-    }, 
-    totalPrice: Number,
-    isDeleted:{
-        type: Boolean,
-        default: false
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
     },
-    status:{
-        type: String,
-        required: true,
-        enum: Status
+    totalPrice: Number,
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
+    status: {
+      type: String,
+      required: true,
+      enum: Status,
     },
     transactionId: {
-        type: String
+      type: String,
     },
     paymentStatus: {
-        type: String,
-        enum: ['UNPAID', 'PAID'], 
-        default: 'UNPAID'
-    }
-})
+      type: String,
+      enum: ['UNPAID', 'PAID'],
+      default: 'UNPAID',
+    },
+  },
+  {
+    timestamps: true,
+  },
+);
 
-
-export const Order = model<TOrder>('Order', orderSchema)
+export const Order = model<TOrder>('Order', orderSchema);
