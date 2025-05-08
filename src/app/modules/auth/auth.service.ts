@@ -135,17 +135,18 @@ const changePassword = async (
     {
       password: newHashedPassword,
       passwordChangedAt: new Date(),
+      needsPasswordChange: false, // Update needsPasswordChange to false
     },
   );
-  await User.findByIdAndUpdate(userData.email, {
-    password: newHashedPassword,
-    passwordChangedAt: new Date(),
-  });
+  //  await User.findByIdAndUpdate(userData.email, {
+  //     password: newHashedPassword,
+  //     passwordChangedAt: new Date(),
+  //   });
   const jwtPayload = {
     email: user?.email,
     role: user?.role,
   };
-  //return null;
+
   const token = jwt.sign(jwtPayload, 'secret', { expiresIn: '1d' });
 
   return { token, user };
