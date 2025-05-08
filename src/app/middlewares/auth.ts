@@ -39,8 +39,8 @@ const auth = (...requiredRoles: TUserRole[]) => {
 
     const userStatus = user?.status;
 
-    if (userStatus === 'deactivate') {
-      throw new AppError(HttpStatus.FORBIDDEN, 'This user is blocked!');
+    if (userStatus === 'inactive') {
+      throw new AppError(HttpStatus.FORBIDDEN, 'This user is inactive!');
     }
 
     if (
