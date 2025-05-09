@@ -43,6 +43,7 @@ const productSchema = new Schema<TProduct>(
       max: [5, 'Rating cannot be more than 5.'],
       default: 3,
     },
+    isDeleted: { type: Boolean, default: false },
   },
   {
     timestamps: true,

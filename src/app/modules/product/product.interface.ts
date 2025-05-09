@@ -13,6 +13,7 @@ import { Types } from 'mongoose';
     quantity: number;
     inStock: boolean;
     rating?: number;
+    isDeleted?: boolean;
   }
 
   export interface ProductModel extends Model<TProduct> {

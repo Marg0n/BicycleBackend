@@ -15,7 +15,11 @@ const createABicycleIntoDB = async (productData: TProduct) => {
 
 const updateABicycleFromDB = async (
   id: string,
-  updatedProductData: Partial<{ price: number; quantity: number, inStock: boolean }>,
+  updatedProductData: Partial<{
+    price: number;
+    quantity: number;
+    inStock: boolean;
+  }>,
 ) => {
   const product = await Product.findById(id);
   if (!product) {
@@ -61,7 +65,13 @@ const getASpecificBicycleFromDB = async (id: string) => {
 };
 
 const deleteABicycleFromDB = async (id: string) => {
-  const result = await Product.findByIdAndDelete(id);
+  // const result = await Product.findByIdAndDelete(id);
+  const result = await Product.findByIdAndUpdate(
+    id,
+    { isDeleted: true },
+    { new: true },
+  );
+  // return result;
 
   if (!result) {
     throw new Error('Product not found!');
