@@ -22,7 +22,9 @@ body: z.object({
     products: z.array(orderedItemValidationSchema).optional(),
     user: z.string().optional(),
     totalPrice: z.number().optional(),
-    status:z.enum([...Status] as [string, ...string[]]),
+    status:z.enum([...Status] as [string, ...string[]]).optional(),
+    paymentStatus: z.enum(['PAID', 'UNPAID']).optional(),
+    transactionId: z.string().optional(),
     isDeleted: z.boolean().optional()
 })
 })

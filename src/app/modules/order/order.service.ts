@@ -181,7 +181,8 @@ const getAllOrdersFromDB = async (query: Record<string, unknown>) => {
 
 const updateOrderIntoDB = async (id: string, payload: Partial<TOrder>) => {
   const status = payload.status;
-  const result = await Order.findByIdAndUpdate(id, { status }, { new: true });
+  const paymentStatus = payload.paymentStatus;
+  const result = await Order.findByIdAndUpdate(id, { status, paymentStatus }, { new: true });
   return result;
 };
 const deleteOrderFromDB = async (id: string) => {
