@@ -15,7 +15,7 @@ const createABicycleIntoDB = async (productData: TProduct) => {
 
 const updateABicycleFromDB = async (
   id: string,
-  updatedProductData: Partial<{ price: number; quantity: number }>,
+  updatedProductData: Partial<{ price: number; quantity: number, inStock: boolean }>,
 ) => {
   const product = await Product.findById(id);
   if (!product) {
@@ -28,6 +28,10 @@ const updateABicycleFromDB = async (
 
   if (updatedProductData.quantity) {
     product.quantity = updatedProductData.quantity;
+  }
+
+  if (updatedProductData.inStock !== undefined) {
+    product.inStock = updatedProductData.inStock;
   }
 
   await product.save();
