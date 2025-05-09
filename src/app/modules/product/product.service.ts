@@ -44,13 +44,18 @@ const updateABicycleFromDB = async (
 };
 
 const getAllBicyclesFromDB = async (query: Record<string, unknown>) => {
-  const productQuery = new QueryBuilder(Product.find(), query)
+  // Filter out deleted products
+  const filter: Record<string, unknown> = {
+    isDeleted: { $ne: true },
+  };
 
+  const productQuery = new QueryBuilder(Product.find(filter), query)
     .search(productSearchableFields)
     .filter()
     .sort()
     .paginate()
     .fields();
+    
   const meta = await productQuery.countTotal();
   const result = await productQuery.modelQuery;
   return { meta, result };
