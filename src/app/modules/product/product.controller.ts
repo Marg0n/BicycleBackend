@@ -52,12 +52,18 @@ const getASpecificBicycle = catchAsync(async (req, res) => {
 const updateABicycle = catchAsync(async (req, res) => {
   const validated = updateProductSchema.parse(req);
   const { id } = validated.params;
-  const { price, quantity, inStock } = validated.body;
+  const { price, quantity, inStock, name, brand, description, type, Img, rating } = validated.body;
 
   const updatedProduct = await ProductServices.updateABicycleFromDB(id, {
     price,
     quantity,
     inStock,
+    name,
+    brand,
+    description,
+    type,
+    Img,
+    rating,
   });
 
   sendResponse.sendDataResponse(res, {

@@ -19,6 +19,12 @@ const updateABicycleFromDB = async (
     price: number;
     quantity: number;
     inStock: boolean;
+    name: string;
+    brand: string;
+    description: string;
+    type: "Mountain" | "Road" | "Hybrid" | "BMX" | "Electric" | "Fat Bikes";
+    Img: string;
+    rating: number;
   }>,
 ) => {
   const product = await Product.findById(id);
@@ -36,6 +42,30 @@ const updateABicycleFromDB = async (
 
   if (updatedProductData.inStock !== undefined) {
     product.inStock = updatedProductData.inStock;
+  }
+
+  if (updatedProductData.name) {
+    product.name = updatedProductData.name;
+  }
+
+  if (updatedProductData.brand) {
+    product.brand = updatedProductData.brand;
+  }
+
+  if (updatedProductData.description) {
+    product.description = updatedProductData.description;
+  }
+
+  if (updatedProductData.type) {
+    product.type = updatedProductData.type;
+  }
+
+  if (updatedProductData.Img) {
+    product.Img = updatedProductData.Img;
+  }
+
+  if (updatedProductData.rating) {
+    product.rating = updatedProductData.rating;
   }
 
   await product.save();
