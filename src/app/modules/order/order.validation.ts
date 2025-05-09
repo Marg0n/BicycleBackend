@@ -14,7 +14,10 @@ body: z.object({
     user: z.string(),
     totalPrice: z.number(),
     status:z.enum([...Status] as [string, ...string[]]),
-    isDeleted: z.boolean()
+    paymentStatus: z.enum(['PAID', 'UNPAID']).optional(),
+    isDeleted: z.boolean(),
+    contact: z.string().optional(),
+    deliveryAddress: z.string().optional()
 })
 })
 const UpdateOrderValidationSchema = z.object({

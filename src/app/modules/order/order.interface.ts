@@ -17,5 +17,7 @@ export type TOrder = {
     isDeleted?: boolean,
     status: TStatus,
     transactionId?: string, 
-    paymentStatus: TPaymentStatus
+    paymentStatus: TPaymentStatus,
+    contact?:string,
+    deliveryAddress?: string
 }

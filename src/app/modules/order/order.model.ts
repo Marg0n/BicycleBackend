@@ -44,6 +44,12 @@ const orderSchema = new Schema<TOrder>(
       enum: ['UNPAID', 'PAID'],
       default: 'UNPAID',
     },
+    contact: {
+      type: String,
+    },
+    deliveryAddress: {
+      type: String,
+    }
   },
   {
     timestamps: true,
