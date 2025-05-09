@@ -88,15 +88,18 @@ const updateProductInventory = async (productId: string, quantity: number) => {
   const product = await Product.findById(productId);
 
   if (!product) {
-    throw new Error("Product not found");
+    throw new Error('Product not found');
   }
 
-  if (quantity <= 0) {
-    throw new Error("Quantity must be greater than zero");
+  //* Allow quantity = 0 only if inStock is false
+  if (quantity < 0 || (quantity === 0 && product.inStock !== false)) {
+    throw new Error(
+      'Quantity must be greater than zero unless marking out of stock',
+    );
   }
 
   if (product.quantity < quantity) {
-    throw new Error("Insufficient stock available");
+    throw new Error('Insufficient stock available');
   }
 
   product.quantity -= quantity;

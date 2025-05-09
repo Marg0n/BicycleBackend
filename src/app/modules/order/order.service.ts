@@ -4,15 +4,14 @@ import { Order } from './order.model';
 import SSLCommerzPayment from 'sslcommerz-lts';
 import { v4 as uuidv4 } from 'uuid';
 import AppError from '../../errors/AppErrors';
-import httpStatus from 'http-status'
+import httpStatus from 'http-status';
 import { Product } from '../product/product.model';
 import mongoose from 'mongoose';
-
+import { TProduct } from '../product/product.interface';
 
 const createOrderIntoDB = async (payload: TOrder) => {
   // console.log(payload);
   const session = await mongoose.startSession();
-
 
   try {
     session.startTransaction();
@@ -68,13 +67,13 @@ const createOrderIntoDB = async (payload: TOrder) => {
       value_a: 'ref001',
       value_b: 'ref002',
       value_c: 'ref003',
-      value_d: 'ref004'
+      value_d: 'ref004',
     };
 
     const sslcz = new SSLCommerzPayment(
       process.env.STORE_ID!,
       process.env.STORE_PASS!,
-      process.env.IS_LIVE === "true"
+      process.env.IS_LIVE === 'true',
     );
 
     const apiResponse = await sslcz.init(data);
@@ -83,24 +82,31 @@ const createOrderIntoDB = async (payload: TOrder) => {
     const orderData = { ...payload, transactionId };
     const createdOrder = await Order.create([orderData], { session });
 
-    await Product.findByIdAndUpdate(
-      productId,
-      { $inc: { quantity: -orderQuantity } },
-      { session }
-    );
+    // await Product.findByIdAndUpdate(
+    //   productId,
+    //   { $inc: { quantity: -orderQuantity } },
+    //   { session }
+    // );
+
+    const newQuantity = product.quantity - orderQuantity;
+    const updatedProductData: Partial<TProduct> = {
+      quantity: newQuantity,
+      inStock: newQuantity > 0,
+    };
+
+    await Product.findByIdAndUpdate(productId, updatedProductData, { session });
 
     await session.commitTransaction();
     session.endSession();
 
     return {
       GatewayPageURL,
-      order: createdOrder[0]
+      order: createdOrder[0],
     };
-
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
-    throw error; 
+    throw error;
   }
 };
 
@@ -109,7 +115,10 @@ const successOrderIntoDB = async (transactionId: string) => {
   const order = await Order.findOne({ transactionId });
 
   if (!order) {
-    throw new AppError(httpStatus.NOT_FOUND, 'No order found with this transaction ID');
+    throw new AppError(
+      httpStatus.NOT_FOUND,
+      'No order found with this transaction ID',
+    );
   }
 
   // Update the order status to processing and payment status to paid
@@ -117,52 +126,44 @@ const successOrderIntoDB = async (transactionId: string) => {
     { transactionId },
     {
       status: 'PROCESSING',
-      paymentStatus: 'PAID'
+      paymentStatus: 'PAID',
     },
-    { new: true }
-  )
+    { new: true },
+  );
 
   if (updatedRwsult.modifiedCount === 0) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Order was not updated');
   }
 
-
   return updatedRwsult;
-}
+};
 
 const failOrderIntoDB = async (transactionId: string) => {
   // delete the order with the given transactionId
   const deleteOrder = await Order.deleteOne({ transactionId });
 
-
   if (deleteOrder.deletedCount === 0) {
     throw new AppError(httpStatus.BAD_REQUEST, 'Failed to delete order');
   }
 
-
   return deleteOrder;
-}
-
-
-
+};
 
 const getAllOrdersFromDB = async (query: Record<string, unknown>) => {
   let page = Number(query.page) || 1; // Default to page 1 if not provided
   let limit = Number(query.limit) || 10; // Default to 10 items per page if not provided
   const skip = (page - 1) * limit;
-  const userId = query.id as string
+  const userId = query.id as string;
 
   // filter object
   const filter: Record<string, unknown> = {
-    isDeleted: { $ne: true }
+    isDeleted: { $ne: true },
   };
   if (userId) {
-    filter.user = userId
+    filter.user = userId;
   }
   // console.log(filter);
   // exclude the deleted orders
-
-
 
   const result = await Order.find(filter)
     .populate('user')
@@ -182,9 +183,14 @@ const getAllOrdersFromDB = async (query: Record<string, unknown>) => {
 const updateOrderIntoDB = async (id: string, payload: Partial<TOrder>) => {
   const status = payload.status;
   const paymentStatus = payload.paymentStatus;
-  const result = await Order.findByIdAndUpdate(id, { status, paymentStatus }, { new: true });
+  const result = await Order.findByIdAndUpdate(
+    id,
+    { status, paymentStatus },
+    { new: true },
+  );
   return result;
 };
+
 const deleteOrderFromDB = async (id: string) => {
   const result = await Order.findByIdAndUpdate(
     id,
