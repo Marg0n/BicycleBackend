@@ -55,7 +55,7 @@ const getAllBicyclesFromDB = async (query: Record<string, unknown>) => {
     .sort()
     .paginate()
     .fields();
-    
+
   const meta = await productQuery.countTotal();
   const result = await productQuery.modelQuery;
   return { meta, result };
@@ -86,18 +86,23 @@ const deleteABicycleFromDB = async (id: string) => {
 
 const updateProductInventory = async (productId: string, quantity: number) => {
   const product = await Product.findById(productId);
+
   if (!product) {
-    throw new Error('Product not found');
+    throw new Error("Product not found");
+  }
+
+  if (quantity <= 0) {
+    throw new Error("Quantity must be greater than zero");
   }
 
   if (product.quantity < quantity) {
-    throw new Error('Insufficient stock available');
+    throw new Error("Insufficient stock available");
   }
+
   product.quantity -= quantity;
 
-  if (product.quantity === 0) {
-    product.inStock = false;
-  }
+  // Automatically update stock status
+  product.inStock = product.quantity > 0;
 
   await product.save();
 
